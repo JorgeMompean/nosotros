@@ -1,8 +1,18 @@
 const CONFIG = {
-  SUPABASE_URL: 'https://enxnrnqnvbprcgdcmawb.supabase.co',          // URL de tu proyecto Supabase (ej. https://xxxx.supabase.co)
-  SUPABASE_KEY: 'sb_publishable_D6G4cN5hsi3I0sOTCwdH6A_JLeRYsb1',          // Clave anon/public de tu Supabase
-  IMGBB_API_KEY: '',         // Añade tu API key de ImgBB: https://api.imgbb.com/
-  IMGBB_ENDPOINT: 'https://api.imgbb.com/1/upload',
+  // Firebase config
+  FIREBASE: {
+    apiKey: "AIzaSyAOW37oxyXvdTRmZeZM1WHzdFmrWfDDy1g",
+    authDomain: "nosotros-1e116.firebaseapp.com",
+    projectId: "nosotros-1e116",
+    storageBucket: "nosotros-1e116.firebasestorage.app",
+    messagingSenderId: "545951789576",
+    appId: "1:545951789576:web:0a76670ef26c947e3cd7bd",
+    measurementId: "G-YDEFG5EKHM"
+  },
+
+  // Imágenes: ponle aquí tu API key de https://api.imgbb.com/ (gratis)
+  // Sin key las imágenes se guardan en base64 en Firestore (no recomendado para fotos grandes)
+  IMGBB_API_KEY: '8633dd571e13a073456e36ce7fdbb5c7',
   STORAGE_KEY: 'nosotros_events_v1',
   DATA_PATH: './data/events.json',
   VERSION: '1.0.0',

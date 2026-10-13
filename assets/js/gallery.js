@@ -3,16 +3,16 @@ const Gallery = (() => {
   let _lightboxIndex = 0;
 
   /* ── Upload to ImgBB ── */
-  async function uploadToImgBB(file, apiKey) {
+  async function _uploadToImgBB(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = async e => {
         const base64 = e.target.result.split(',')[1];
         const form = new FormData();
-        form.append('key', apiKey);
+        form.append('key', CONFIG.IMGBB_API_KEY);
         form.append('image', base64);
         try {
-          const res = await fetch(CONFIG.IMGBB_ENDPOINT, { method: 'POST', body: form });
+          const res  = await fetch('https://api.imgbb.com/1/upload', { method: 'POST', body: form });
           const json = await res.json();
           if (json.success) {
             resolve({ url: json.data.url, thumb: json.data.thumb?.url || json.data.url, deleteUrl: json.data.delete_url });
@@ -26,7 +26,7 @@ const Gallery = (() => {
   }
 
   /* ── Local base64 fallback ── */
-  async function toBase64(file) {
+  async function _toBase64(file) {
     return new Promise(resolve => {
       const reader = new FileReader();
       reader.onload = e => resolve(e.target.result);
@@ -34,7 +34,7 @@ const Gallery = (() => {
     });
   }
 
-  /* ── Process files (upload or base64) ── */
+  /* ── Process files: ImgBB si hay key, base64 si no ── */
   async function processFiles(files, onProgress) {
     const results = [];
     for (let i = 0; i < files.length; i++) {
@@ -42,10 +42,9 @@ const Gallery = (() => {
       if (onProgress) onProgress(i + 1, files.length, file.name);
       try {
         if (CONFIG.IMGBB_API_KEY) {
-          const img = await uploadToImgBB(file, CONFIG.IMGBB_API_KEY);
-          results.push(img);
+          results.push(await _uploadToImgBB(file));
         } else {
-          const data = await toBase64(file);
+          const data = await _toBase64(file);
           results.push({ url: data, thumb: data, deleteUrl: null });
         }
       } catch(err) {
